@@ -1,0 +1,53 @@
+# Build directories
+/build/
+/build-*/
+/cmake-build-*/
+
+# Compiled objects and binaries
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# IDE/editor files
+.vscode/
+.idea/
+.vs/
+x64/
+*.user
+*.sln
+*.slnx
+*.vcxproj*
+*.code-workspace
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Logs / temp
+*.log
+*.tmp
+
+*.7z
+
+
+# Don't want to include Eigen, astrokit, or cspice in the repo itself
+include/
+
+# also don't want to include spice kernels
+kernels/
