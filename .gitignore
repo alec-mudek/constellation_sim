@@ -47,7 +47,8 @@ Thumbs.db
 
 
 # Don't want to include Eigen, astrokit, or cspice in the repo itself
-include/
+include/Eigen/
+include/cspice/
 
 # also don't want to include spice kernels
 kernels/
