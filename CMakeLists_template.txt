@@ -1,0 +1,55 @@
+
+cmake_minimum_required(VERSION 3.26)
+
+project(constellation_sim LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20) #using the newest version for development; may be able to use 17, will check
+set(CMAKE_CXX_STANDARD_REQUIRED ON) #for now, requiring the newest; 
+#note: there are a couple lines in astrokit that require C++20 but can change that to be more backward compatible
+
+### CHANGE THESE TO MATCH YOUR SETUP ###
+#handle dependencies
+set(EIGEN_INCLUDE_DIR C:/path/to/include) #note: you should have a folder like this: C:/path/to/include/Eigen/, stop at the include/ directory for these
+set(CSPICE_INCLUDE_DIR C:/path/to/include)
+set(CSPICE_LIB_DIR C:/path/to/cspice/lib)
+set(ASTROKIT_INCLUDE_DIR C:/path/to/repo/include) #a copy of astrokit is already located in the include/ folder in constellation_sim (packaged with it)
+### CHANGE THESE TO MATCH YOUR SETUP###
+
+# note: will improve both the above block and the below HEADER_FILES & SRC_FILES lines; time-permitting
+									
+# headers
+set(HEADER_FILES
+	src/Constellation.h
+	src/ForceModel.h
+	src/GroundStation.h
+	src/Integrator.h
+	src/Planet.h
+	src/Spacecraft.h
+	src/SpiceHandler.h
+	src/structure_definitions.h
+	src/WalkerDelta.h)
+
+# source files
+set(SRC_FILES
+	src/main.cpp
+	src/Constellation.cpp
+	src/ForceModel.cpp
+	src/GroundStation.cpp
+	src/Integrator.cpp
+	src/Planet.cpp
+	src/Spacecraft.cpp
+	src/SpiceHandler.cpp
+	src/WalkerDelta.cpp)
+	
+add_executable(constellation_sim ${HEADER_FILES} ${SRC_FILES})
+
+
+target_include_directories(constellation_sim PRIVATE
+	src
+	${EIGEN_INCLUDE_DIR}
+	${CSPICE_INCLUDE_DIR}
+	${ASTROKIT_INCLUDE_DIR})
+	
+#also need to link the cspice libraries
+target_link_directories(constellation_sim PRIVATE ${CSPICE_LIB_DIR})
+target_link_libraries(constellation_sim PRIVATE cspice.lib csupport.lib)

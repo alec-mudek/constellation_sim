@@ -7,7 +7,7 @@ Current modeling assumptions:
 -Purely an elevation contraint for ground station access
 
 For now, simulation includes a single ground station and a 12/3/1 Walker Delta constellation.
-Picked 56 deg inclination and 20,000 km sma.
+Picked 56 deg inclination and 25,000 km sma.
 */
 
 #include "Planet.h"
@@ -32,7 +32,7 @@ int main()
 	Planet earth(spice, astrokit::EARTH.MU_km3_s2, astrokit::EARTH.R_MEAN_km, astrokit::EARTH.R_EQUATOR_km, astrokit::EARTH.J2, 399, "IAU_EARTH");
 	ForceModel fm(earth);
 	Integrator rk4(earth, fm);
-	WalkerDelta wd_const(earth, rk4, et0, 12, 3, 1, 56.0 * astrokit::DEG2RAD, 20000.0); //inc & sma roughly based off Galileo WD constellation
+	WalkerDelta wd_const(earth, rk4, et0, 12, 3, 1, 56.0 * astrokit::DEG2RAD, 25000.0); //inc & sma roughly based off Galileo WD constellation
 
 	//define ground station(s)
 	//for now, just using approxiamte APL lon/lat
