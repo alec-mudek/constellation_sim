@@ -18,7 +18,8 @@ Planet::Planet(SpiceHandler& spice, double mu, double mean_radius, double eq_rad
 
 
 
-Planet::Planet(SpiceHandler& spice, double mu, double mean_radius, double eq_radius, double j2, int spkid, std::string bcf_frame_name, std::vector<std::array<double, 2>> station_lon_lats) :
+Planet::Planet(SpiceHandler& spice, double mu, double mean_radius, double eq_radius, double j2, int spkid, std::string bcf_frame_name, 
+	           std::vector<std::string> station_names, std::vector<std::array<double, 2>> station_lon_lats) :
 	spice(spice)
 {
 	set_mu(mu);
@@ -27,9 +28,9 @@ Planet::Planet(SpiceHandler& spice, double mu, double mean_radius, double eq_rad
 	set_j2(j2);
 	set_spkid(spkid);
 	set_bcf_frame_name(bcf_frame_name);
-	for (std::array<double, 2> lon_lat : station_lon_lats)
+	for (std::size_t i = 0; i < station_lon_lats.size(); i++)
 	{
-		new_station(lon_lat[0], lon_lat[1]);
+		new_station(station_names[i], station_lon_lats[i][0], station_lon_lats[i][1]);
 		//note: this constructor doesn't allow for specifying the half_angle of the stations
 		//      if you want that level of detail you need to use the correct NewStation() method directly to add them
 		//      ground stations default to a 90 degree half angle
@@ -106,15 +107,15 @@ void Planet::set_bcf_frame_name(std::string new_frame_name)
 #pragma endregion setters
 
 #pragma region utilities
-void Planet::new_station(double lon, double lat)
+void Planet::new_station(std::string name, double lon, double lat)
 {
-	GroundStation new_station(lon, lat);
+	GroundStation new_station(name, lon, lat);
 	this->stations.push_back(new_station);
 }
 
-void Planet::new_station(double lon, double lat, double half_angle)
+void Planet::new_station(std::string name, double lon, double lat, double half_angle)
 {
-	GroundStation new_station(lon, lat, half_angle);
+	GroundStation new_station(name, lon, lat, half_angle);
 	this->stations.push_back(new_station);
 }
 

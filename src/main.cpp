@@ -36,7 +36,7 @@ int main()
 
 	//define ground station(s)
 	//for now, just using approxiamte APL lon/lat
-	earth.new_station(39.0 * astrokit::DEG2RAD, -77.0 * astrokit::DEG2RAD);
+	earth.new_station("APL", 39.0 * astrokit::DEG2RAD, -77.0 * astrokit::DEG2RAD);
 
 	//now have both our ground station and constellation satellites initialized
 	//time to propagate
@@ -44,6 +44,9 @@ int main()
 
 	std::cout << "Propagation finished.";
 	//NEXT STEP: Data processing, analysis, & visualization
+
+	//output csv state histories for each satellite
+	wd_const.save_spacecraft_histories("C:/constellation_sim_results/");
 
 	return 0;
 }

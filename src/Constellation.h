@@ -35,6 +35,9 @@ public:
 	void propagate(double duration, double step_size);
 	//note: want to propagate every spacecraft in the constellation for each step before moving on
 
+	void save_spacecraft_histories(std::string file_name_root); 
+	//note: each spacecraft writes its own csv; will use the spacecraft name appended to the file_name_root for each csv
+
 private:
 	Planet& cb;
 	Integrator& integrator;

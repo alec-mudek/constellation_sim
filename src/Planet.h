@@ -11,7 +11,8 @@ class Planet
 public:
 	Planet(SpiceHandler& spice);
 	Planet(SpiceHandler& spice, double mu, double mean_radius, double eq_radius, double j2, int spkid, std::string bcf_frame_name);
-	Planet(SpiceHandler& spice, double mu, double mean_radius, double eq_radius, double j2, int spkid, std::string bcf_frame_name, std::vector<std::array<double, 2>> station_lon_lats);
+	Planet(SpiceHandler& spice, double mu, double mean_radius, double eq_radius, double j2, int spkid, std::string bcf_frame_name, 
+		   std::vector<std::string> station_names, std::vector<std::array<double, 2>> station_lon_lats);
 
 	//going for a singleton-ish pattern for the Planet class; don't want it to be copyable
 	Planet(const Planet&) = delete;
@@ -37,8 +38,8 @@ public:
 	void set_bcf_frame_name(std::string new_frame_name);
 
 	//utilities
-	void new_station(double lon, double lat);
-	void new_station(double lon, double lat, double half_angle);
+	void new_station(std::string name, double lon, double lat);
+	void new_station(std::string name, double lon, double lat, double half_angle);
 	void remove_station(double lon, double lat); //assumes only 1 station per lat/lon location
 	
 	Eigen::Vector3d sun_vector(double et); //unit vector from the center of the planet to the sun

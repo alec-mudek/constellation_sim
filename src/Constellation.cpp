@@ -74,13 +74,40 @@ void Constellation::propagate(double duration, double step_size)
 		}
 		total_time += step_size;
 	}
-	if (total_time < duration) //we need one more partial step
+	if (total_time < duration) //we need one more partial step; want to always include the exact final time in the output
 	{
 		double partial_step = duration - total_time;
 		for (auto& sc : this->spacecraft)
 		{
 			sc.step(partial_step);
 		}
+	}
+}
+void Constellation::save_spacecraft_histories(std::string file_name_root)
+{
+	//store spacecraft names as they're used to name the output files; want to make sure there are no duplicates
+	std::vector<std::string> used_names{};
+
+	//loop through each spacecraft in the constellation and have them write their state histories
+	for (auto& sc : this->spacecraft)
+	{
+		std::string sc_name = sc.get_name();
+
+		//check how many times the spacecraft name has already appeared
+		int counter = 0;
+		for (std::size_t i = 0; i < used_names.size(); i++)
+		{
+			if (sc_name == used_names[i])
+			{
+				counter++;
+			}
+		}
+		std::string file_name = file_name_root + sc_name;
+		if (counter > 0)
+		{
+			file_name += std::to_string(counter);
+		}
+		sc.write_history_to_csv(file_name + ".csv"); //appending the csv file type here instead of in Spacecraft; may change later
 	}
 }
 #pragma endregion utilities

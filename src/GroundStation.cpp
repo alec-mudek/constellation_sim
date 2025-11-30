@@ -1,25 +1,32 @@
 #include "GroundStation.h"
 
 
-GroundStation::GroundStation() :
+GroundStation::GroundStation(std::string name) :
 	lon(0.0), lat(0.0), elevation_mask(0.0)
 {
+	set_name(name);
 }
 
-GroundStation::GroundStation(double lon, double lat) : elevation_mask(0.0)
+GroundStation::GroundStation(std::string name, double lon, double lat) : elevation_mask(0.0)
 {
+	set_name(name);
 	set_lon(lon);
 	set_lat(lat);
 }
 
-GroundStation::GroundStation(double lon, double lat, double elev_mask)
+GroundStation::GroundStation(std::string name, double lon, double lat, double elev_mask)
 {
+	set_name(name);
 	set_lon(lon);
 	set_lat(lat);
 	set_elevation_mask(elev_mask);
 }
 
 #pragma region getters
+std::string GroundStation::get_name() const
+{
+	return this->name;
+}
 double GroundStation::get_lon() const
 {
 	return this->lon;
@@ -41,6 +48,10 @@ Eigen::Vector3d GroundStation::get_surface_normal_bcf() const
 #pragma endregion getters
 
 #pragma region setters
+void GroundStation::set_name(std::string new_name)
+{
+	this->name = new_name;
+}
 void GroundStation::set_lon(double new_lon)
 {
 	this->lon = new_lon;
