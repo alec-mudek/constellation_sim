@@ -73,10 +73,10 @@ namespace astrokit
 	inline Eigen::Matrix3d lonlat_to_cart(double lon, double lat)
 	{
 		//lon = rotation about z
-		Eigen::Matrix3d C1 = ZRotation(lon);
+		Eigen::Matrix3d C1 = z_rotation(lon);
 
 		//lat = rotaiton about y
-		Eigen::Matrix3d C2 = YRotation(lat);
+		Eigen::Matrix3d C2 = y_rotation(lat);
 
 		Eigen::Matrix3d C = C1 * C2;
 
