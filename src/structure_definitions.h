@@ -25,14 +25,12 @@ struct TrackingState
 
 	//need to know relevant mean orbital elements for bounding box
 	double sma_mean;
-	double ecc_mean;
 	double inc_mean;
 	double raan_mean;
-	double arglat_mean; //instead of argp + ta
 
 	//need to know relative position in constellation
-	double neighbor_one_rel_ta; //true anomaly delta b/w a spacecraft and its neighbor
-	double neighbor_two_rel_ta;
+	double neighbor1_rel_angle; //approximate argument of latitude delta b/w a spacecraft and its neighbor (actually find the angle between the position vectors to avoid angle wrap headaches)
+	double neighbor2_rel_angle;
 };
 
 struct COE //using this to store reference conic trajectories
@@ -43,4 +41,13 @@ struct COE //using this to store reference conic trajectories
 	double raan;
 	double argp;
 	double ta;
+};
+
+struct BoundingBox //orbital element bounding boxes for members of constellation
+//note: using orbital element bounds instead of RTN for this simulation
+{
+	double dsma;
+	double dinc;
+	double draan;
+	double darglat;
 };

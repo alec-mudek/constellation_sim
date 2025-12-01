@@ -1,19 +1,23 @@
 #include "Constellation.h"
 #include <astrokit/integrators.h>
 
-Constellation::Constellation(Planet& cb, Integrator& integrator) : cb(cb), current_et(0.0), spacecraft{}, integrator(integrator)
+Constellation::Constellation(Planet& cb, Integrator& integrator) : 
+	cb(cb), current_et(0.0), spacecraft{}, sc_bounds{}, integrator(integrator)
 {
 }
 
-Constellation::Constellation(Planet& cb, Integrator& integrator, double et0) : cb(cb), integrator(integrator)
+Constellation::Constellation(Planet& cb, Integrator& integrator, double et0) : 
+	cb(cb), spacecraft{}, sc_bounds{}, integrator(integrator)
 {
 	set_et(et0);
 }
 
-Constellation::Constellation(Planet& cb, Integrator& integrator, double et0, std::vector<Spacecraft> sc_list) : cb(cb), integrator(integrator)
+Constellation::Constellation(Planet& cb, Integrator& integrator, double et0, std::vector<Spacecraft> sc_list, BoundingBox sc_bounds) : 
+	cb(cb), integrator(integrator)
 {
 	set_et(et0);
 	this->spacecraft = sc_list; //provided a vector of already-initialized s/c to the constructor
+	set_sc_bounds(sc_bounds); //provided the mean orbital element bounds for each spacecraft
 }
 
 #pragma region getters
@@ -26,12 +30,22 @@ double Constellation::get_et() const
 {
 	return this->current_et;
 }
+
+BoundingBox Constellation::get_sc_bounds() const
+{
+	return this->sc_bounds;
+}
 #pragma endregion getters
 
 #pragma region setters
 void Constellation::set_et(double new_et)
 {
 	this->current_et = new_et;
+}
+
+void Constellation::set_sc_bounds(BoundingBox new_bounds)
+{
+	this->sc_bounds = new_bounds;
 }
 #pragma endregion setters
 

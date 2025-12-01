@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <ostream>
+#include <astrokit/math_utils.h>
 #include "structure_definitions.h"
 #include "Integrator.h"
 #include "Planet.h"
@@ -22,6 +23,7 @@ public:
 	std::string get_name() const;
 	COE get_ref_conic() const;
 	State get_state() const;
+	TrackingState get_tracking() const;
 	const std::vector<double>& get_et_history() const;
 	const std::vector<Eigen::Vector<double, 6>>& get_cartesian_history() const; //ICRF
 	const std::vector<Eigen::Vector<double, 6>>& get_coe_history() const; //instantaneous elements
@@ -45,7 +47,15 @@ public:
 	
 	void step(double dt);
 
+	std::size_t get_et_index(double et); //gets the location index of the closest match to a given et in the et_history vector
+	void update_tracking(Spacecraft& neighbor1, Spacecraft& neighbor2); //fills in the tracking state information
+	//note: only keeping current information for this atm, not storing the full history (by design)
+	bool check_in_bounds(const BoundingBox& bounds); //returns true/false whether or not the spacecraft is currently within the bounds
+	//note: returns an Eigen vector instead of a single bool so that we can know which check(s) failed
+
+	//data handling
 	void history_row_count_validation();
+	Eigen::MatrixXd build_partial_eigen_history(std::size_t ix0, std::size_t ixf);
 	void build_eigen_state_history();
 	void write_history_to_csv(std::string filename);
 
@@ -54,12 +64,17 @@ private:
 	std::string name;
 
 	COE ref_conic; //orbital elements for reference, conic orbit assumed when initializing the satellite's state
+	double ref_period; //period of the conic reference orbit
 
 	//note: for now, leaving mass out of this simulation as a first-pass, quick software example
 	State current_state;
+	//note: using std::vector instead of Eigen matrices here since it's more efficient for memory reallocation as the states grow.
+	//		will convert the states to Eigen matrices later as needed for efficient computations.
 	std::vector<double> et_history;
 	std::vector<Eigen::Vector<double, 6>> cartesian_history; //ICRF
 	std::vector<Eigen::Vector<double, 6>> coe_history; //instantaneous orbital elements
+
+	TrackingState tracking; //contains bounding box information for the current time
 
 	Eigen::MatrixXd collected_history;
 	//note: will hold the state history in the et_history, cartesian_history, & coe_history vectors;

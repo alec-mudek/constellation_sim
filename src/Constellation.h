@@ -9,7 +9,7 @@ class Constellation
 public:
 	Constellation(Planet& cb, Integrator& integrator);
 	Constellation(Planet& cb, Integrator& integrator, double et0);
-	Constellation(Planet& cb, Integrator& integrator, double et0, std::vector<Spacecraft> sc_list);
+	Constellation(Planet& cb, Integrator& integrator, double et0, std::vector<Spacecraft> sc_list, BoundingBox sc_bounds);
 
 	//going for a singleton-ish pattern for the Constellation class; don't want it to be copyable
 	Constellation(const Constellation&) = delete;
@@ -20,9 +20,11 @@ public:
 	//getters
 	const std::vector<Spacecraft>& get_sats() const;
 	double get_et() const;
+	BoundingBox get_sc_bounds() const;
 
 	//setters
 	void set_et(double new_et);
+	void set_sc_bounds(BoundingBox new_bounds);
 
 	//utilities
 	void add_spacecraft(Spacecraft new_sc);
@@ -43,6 +45,7 @@ private:
 	Integrator& integrator;
 
 	std::vector<Spacecraft> spacecraft;
+	BoundingBox sc_bounds;
 	double current_et;
 
 };

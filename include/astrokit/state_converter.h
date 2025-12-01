@@ -147,4 +147,63 @@ namespace astrokit
 
         return cart;
     }
+
+    inline Eigen::Vector<double, 6> cart_to_radec(const Eigen::Vector<double, 6>& cart)
+    {
+        Eigen::Vector3d r = cart.segment<3>(0);
+        Eigen::Vector3d v = cart.segment<3>(3);
+
+        double R = r.norm();
+        double V = v.norm();
+
+        double raan = atan2(r[1], r[0]);
+        double dec = asin(r[2] / R);
+
+        double vraan = atan2(v[1], v[0]);
+        double vdec = asin(v[2] / V);
+
+        Eigen::Vector<double, 6> radec;
+        radec << R, raan, dec, V, vraan, vdec;
+
+        return radec;
+    }
+
+    inline Eigen::Vector<double, 6> radec_to_cart(const Eigen::Vector<double, 6>& radec)
+    {
+        double R = radec[0];
+        double raan = radec[1];
+        double dec = radec[2];
+        double V = radec[3];
+        double vraan = radec[4];
+        double vdec = radec[5];
+
+        double rx = R * cos(raan) * cos(dec);
+        double ry = R * sin(raan) * cos(dec);
+        double rz = R * sin(dec);
+
+        double vx = V * cos(vraan) * cos(vdec);
+        double vy = V * sin(vraan) * cos(vdec);
+        double vz = V * sin(vdec);
+
+        Eigen::Vector<double, 6> cart;
+        cart << rx, ry, rz, vx, vy, vz;
+
+        return cart;
+    }
+
+    inline Eigen::Vector<double, 6> coe_to_radec(const Eigen::Vector<double, 6>& coes, const double mu)
+    {
+        Eigen::Vector<double, 6> cart = coe_to_cart(coes, mu);
+        Eigen::Vector<double, 6> radec = cart_to_radec(cart);
+
+        return radec;
+    }
+
+    inline Eigen::Vector<double, 6> radec_to_coe(const Eigen::Vector<double, 6>& radec, const double mu)
+    {
+        Eigen::Vector<double, 6> cart = radec_to_cart(radec);
+        Eigen::Vector<double, 6> coes = cart_to_coe(cart, mu);
+
+        return coes;
+    }
 }// namespace astrokit

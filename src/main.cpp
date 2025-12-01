@@ -32,7 +32,7 @@ int main()
 	Planet earth(spice, astrokit::EARTH.MU_km3_s2, astrokit::EARTH.R_MEAN_km, astrokit::EARTH.R_EQUATOR_km, astrokit::EARTH.J2, 399, "IAU_EARTH");
 	ForceModel fm(earth);
 	Integrator rk4(earth, fm);
-	WalkerDelta wd_const(earth, rk4, et0, 12, 3, 1, 56.0 * astrokit::DEG2RAD, 25000.0); //inc & sma roughly based off Galileo WD constellation
+	WalkerDelta wd_const(earth, rk4, et0, 27, 3, 1, 56.0 * astrokit::DEG2RAD, 29600.0); //inc & sma roughly based off Galileo WD constellation
 
 	//define ground station(s)
 	//for now, just using approxiamte APL lon/lat
